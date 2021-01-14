@@ -8,6 +8,7 @@
     <div class="main-container">
       <beer-list v-bind:allBrewDogBeers="allBrewDogBeers"></beer-list>
       <beer-detail v-bind:beer="selectedBeer"></beer-detail>
+    
     </div>
 
   </div>
@@ -24,7 +25,8 @@ export default {
   data() {
     return {
       allBrewDogBeers: [],
-      selectedBeer: null
+      selectedBeer: null,
+      favouriteBeers: []
     };
   },
   mounted(){ 
@@ -33,6 +35,7 @@ export default {
       .then(data => this.allBrewDogBeers = data);
 
       eventBus.$on('beer-selected', (beer) => {this.selectedBeer = beer});
+      eventBus.$on('beer-favourite', (favBeer) => {this.favouriteBeers.push(favBeer)});
     },
   components: {
     'beer-list': BeerList,
