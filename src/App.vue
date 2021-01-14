@@ -7,7 +7,10 @@
     </ul> -->
     <div class="main-container">
       <beer-list v-bind:allBrewDogBeers="allBrewDogBeers"></beer-list>
-      <beer-detail v-bind:beer="selectedBeer"></beer-detail>
+      <div>
+        <beer-detail v-bind:beer="selectedBeer"></beer-detail>
+        <favourite-beers v-bind:favBeers="favouriteBeers"></favourite-beers>
+      </div>
     
     </div>
 
@@ -19,6 +22,7 @@ import { eventBus }  from './main.js'
 
 import BeerList from './components/BeerList.vue'
 import BeerDetail from './components/BeerDetail.vue'
+import FavouriteBeers from './components/FavouriteBeers.vue'
 
 export default {
   name: "App",
@@ -35,14 +39,18 @@ export default {
       .then(data => this.allBrewDogBeers = data);
 
       eventBus.$on('beer-selected', (beer) => {this.selectedBeer = beer});
-      eventBus.$on('beer-favourite', (favBeer) => {this.favouriteBeers.push(favBeer)});
+      eventBus.$on('beer-favourite', (favBeer) => {
+        if (this.favouriteBeers.indexOf(favBeer) == -1)
+        {
+        this.favouriteBeers.push(favBeer)
+        }
+        } 
+        );
     },
   components: {
     'beer-list': BeerList,
-    'beer-detail': BeerDetail
-  },
-  methods: {
-    
+    'beer-detail': BeerDetail,
+    'favourite-beers': FavouriteBeers
   }
 };
 </script>

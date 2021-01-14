@@ -9,6 +9,7 @@
 
 <script> 
 import Beer from "./Beer.vue"
+
 export default {
     name: "beer-list",
     data() {
