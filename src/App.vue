@@ -44,40 +44,46 @@ export default {
     // loop through fetch commands while the promise doesnt look empty, when it does, do a promise.all etc...
 
 
-    // getAllBeers:  function() {
-    //   let allData = [];
-    //   let morePagesAvailable = true;
-    //   let currentPage = 0;
+    getAllBeers:  async function() {
+      let allData = [];
+      let morePagesAvailable = true;
+      let currentPage = 0;
 
-    //   while(morePagesAvailable) {
-    //     currentPage++;
-    //     const response = await fetch(`https://api.punkapi.com/v2/beers?page=${currentPage}`)
-    //     let { data, total_pages } = await response.json();
-    //     data.forEach(e => allData.unshift(e));
-    //     morePagesAvailable = currentPage < total_pages;
-    //   }
+      while(morePagesAvailable) {
+        currentPage++;
+        const response = await fetch(`https://api.punkapi.com/v2/beers?page=${currentPage}`)
+        let data = await response.json();
+       
+        data.forEach(e => allData.push(e));
 
-    //   this.allBrewDogBeers = allData;
-    // },
+        // we can't get the total no. of pages for the API. Hardcoded to 30.
+        console.log("currenPage=", currentPage)
+        morePagesAvailable = currentPage < 30;
+      }
+
+      this.allBrewDogBeers = allData;
+    },
 
     addFavourBeer: function(beer) {
       const index = this.allBrewDogBeers.indexOf(beer);
       this.allBrewDogBeers[index].isFavourite = true;
+      // trigger an update with new data
       this.allBrewDogBeers = [...this.allBrewDogBeers];
     },
     removeFavourBeer: function(beer) {
       console.log(beer)
       const index = this.allBrewDogBeers.indexOf(beer);
       this.allBrewDogBeers[index].isFavourite = false;
+      // trigger an update with new data
       this.allBrewDogBeers = [...this.allBrewDogBeers];
     }
     },
   mounted(){ 
-    // this.getAllBeers();
+    this.getAllBeers();
     
-    fetch("https://api.punkapi.com/v2/beers")
-    .then(response => this.allBrewDogBeers = response.json())
-    .then(data => this.allBrewDogBeers = data);
+    // fetch("https://api.punkapi.com/v2/beers")
+    // .then(response => this.allBrewDogBeers = response.json())
+    // .then(data => this.allBrewDogBeers = data);
 
     eventBus.$on('beer-selected', (beer) => {this.selectedBeer = beer});
     eventBus.$on('beer-favourite-add', beer => this.addFavourBeer(beer));
