@@ -6,10 +6,10 @@
     <li v-for="beer in allBrewDogBeers">{{ beer.name}}</li>
     </ul> -->
     <div class="main-container">
-      <beer-list v-bind:allBrewDogBeers="allBrewDogBeers"></beer-list>
+      <beer-list v-bind:all-beers="allBrewDogBeers"></beer-list>
       <div>
         <beer-detail v-bind:beer="selectedBeer" v-if="selectedBeer"></beer-detail>
-        <!-- <favourite-beers v-bind:allBrewDogBeers="allBrewDogBeers"></favourite-beers> -->
+        <!-- <favourite-beers v-bind:all-beers="allBrewDogBeers"></favourite-beers> -->
       </div>
     
     </div>
@@ -39,7 +39,12 @@ export default {
     };
   },
   methods:{
-    // getAllBeers: async function() {
+
+    // to test, look up the fetch reply natively.  This is what returns a promise, what does as promise of nothing look like?
+    // loop through fetch commands while the promise doesnt look empty, when it does, do a promise.all etc...
+
+
+    // getAllBeers:  function() {
     //   let allData = [];
     //   let morePagesAvailable = true;
     //   let currentPage = 0;

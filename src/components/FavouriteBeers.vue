@@ -1,9 +1,9 @@
 <template>
 <div>
     <ul>
-    <li v-for="(beer, index) in favouriteBeers" v-bind:value="beer" v-bind:key="index">
+    <li v-for="(beer, index) in all-beers" v-bind:value="beer" v-bind:key="index">
         Name: {{ beer.name }} - ABV: {{ beer.abv }} 
-        <button v-on:click="removeFromFavourites(favouriteBeers[index] || beer)">x</button>  <!-- how do you pass to method?-->
+        <button v-on:click="removeFromFavourites(all-beers[index] || beer)">x</button>  <!-- how do you pass to method?-->
     </li>
     </ul>
 </div>
@@ -18,7 +18,7 @@ export default {
       return this.allBrewDogBeers.filter((beer) => beer.isFavourite);  //<-- this doesn't work?!
     },
     },
-    props: ["allBrewDogBeers"],
+    props: ["all-beers"],
     methods: {
     removeFromFavourites: function(beer) {
         eventBus.$emit('beer-favourite-remove', beer)
