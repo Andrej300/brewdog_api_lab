@@ -4,6 +4,7 @@
     <li v-for="beer in allBrewDogBeers"> {{ beer.name }}</li>
 </ul> -->
     <beer v-for="(beer, index) in allBrewDogBeers" :key="index" v-bind:beer="beer"></beer>
+
 </div>
 </template>
 
@@ -11,14 +12,14 @@
 import Beer from "./Beer.vue";
 
 export default {
-  name: "beer-list",
-  data() {
-    return {};
-  },
-  props: ["allBrewDogBeers"],
-  components: {
-    beer: Beer,
-  },
+    name: "beer-list",
+    data() {
+        return {};
+    },
+    props: ["allBrewDogBeers"],
+    components: {
+        beer: Beer,
+    },
 };
 </script>
 
