@@ -6,10 +6,10 @@
     <li v-for="beer in allBrewDogBeers">{{ beer.name}}</li>
     </ul> -->
     <div class="main-container">
-      <beer-list v-bind:all-beers="allBrewDogBeers"></beer-list>
+      <beer-list v-bind:allBeers="allBrewDogBeers"></beer-list>
       <div>
-        <beer-detail v-bind:beer="selectedBeer" v-if="selectedBeer"></beer-detail>
-        <!-- <favourite-beers v-bind:all-beers="allBrewDogBeers"></favourite-beers> -->
+        <beer-detail :beer="selectedBeer" v-if="selectedBeer"></beer-detail>
+        <favourite-beers v-if="Array.isArray(allBrewDogBeers)" :allBeers="allBrewDogBeers"></favourite-beers>
       </div>
     
     </div>
@@ -57,15 +57,19 @@ export default {
     //     morePagesAvailable = currentPage < total_pages;
     //   }
 
-    //   this.testGetAllBeers = allData;},
+    //   this.allBrewDogBeers = allData;
+    // },
 
     addFavourBeer: function(beer) {
       const index = this.allBrewDogBeers.indexOf(beer);
-      this.allBrewDogBeers[index].isFavourite = true; 
+      this.allBrewDogBeers[index].isFavourite = true;
+      this.allBrewDogBeers = [...this.allBrewDogBeers];
     },
     removeFavourBeer: function(beer) {
+      console.log(beer)
       const index = this.allBrewDogBeers.indexOf(beer);
       this.allBrewDogBeers[index].isFavourite = false;
+      this.allBrewDogBeers = [...this.allBrewDogBeers];
     }
     },
   mounted(){ 

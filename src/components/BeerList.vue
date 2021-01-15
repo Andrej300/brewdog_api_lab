@@ -3,7 +3,7 @@
     <!-- <ul>
     <li v-for="beer in allBrewDogBeers"> {{ beer.name }}</li>
 </ul> -->
-    <beer v-for="(beer, index) in all-beers" :key="index" v-bind:beer="beer"></beer>
+    <beer v-for="(beer, index) in allBeers" :key="index" :beer="beer"></beer>
 
 </div>
 </template>
@@ -16,7 +16,7 @@ export default {
     data() {
         return {};
     },
-    props: ["all-beers"],
+    props: ["allBeers"],
     components: {
         beer: Beer,
     },
