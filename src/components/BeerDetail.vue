@@ -16,7 +16,7 @@ export default {
     props: ['beer'],
     methods: {
     addToFavourites: function() {
-        eventBus.$emit('beer-favourite', this.beer)
+        eventBus.$emit('beer-favourite-add', this.beer)
     }
     }
     

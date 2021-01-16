@@ -6,10 +6,10 @@
     <li v-for="beer in allBrewDogBeers">{{ beer.name}}</li>
     </ul> -->
     <div class="main-container">
-      <beer-list v-bind:allBrewDogBeers="allBrewDogBeers"></beer-list>
+      <beer-list v-bind:allBeers="allBrewDogBeers"></beer-list>
       <div>
-        <beer-detail v-bind:beer="selectedBeer"></beer-detail>
-        <favourite-beers v-bind:favBeers="favouriteBeers"></favourite-beers>
+        <beer-detail :beer="selectedBeer" v-if="selectedBeer"></beer-detail>
+        <favourite-beers v-if="Array.isArray(allBrewDogBeers)" :allBeers="allBrewDogBeers"></favourite-beers>
       </div>
     
     </div>
@@ -26,32 +26,69 @@ import FavouriteBeers from './components/FavouriteBeers.vue'
 
 export default {
   name: "App",
-  data() {
-    return {
-      allBrewDogBeers: [],
-      selectedBeer: null,
-      favouriteBeers: []
-    };
-  },
-  mounted(){ 
-      fetch("https://api.punkapi.com/v2/beers")
-      .then(response => this.allBrewDogBeers = response.json())
-      .then(data => this.allBrewDogBeers = data);
-
-      eventBus.$on('beer-selected', (beer) => {this.selectedBeer = beer});
-      eventBus.$on('beer-favourite', (favBeer) => {
-        if (this.favouriteBeers.indexOf(favBeer) == -1)
-        {
-        this.favouriteBeers.push(favBeer)
-        }
-        } 
-        );
-    },
   components: {
     'beer-list': BeerList,
     'beer-detail': BeerDetail,
     'favourite-beers': FavouriteBeers
-  }
+  },
+  data() {
+    return {
+      allBrewDogBeers: [],
+      // testGetAllBeers: [],
+      selectedBeer: null
+    };
+  },
+  methods:{
+
+    // to test, look up the fetch reply natively.  This is what returns a promise, what does as promise of nothing look like?
+    // loop through fetch commands while the promise doesnt look empty, when it does, do a promise.all etc...
+
+
+    getAllBeers:  async function() {
+      let allData = [];
+      let morePagesAvailable = true;
+      let currentPage = 0;
+
+      while(morePagesAvailable) {
+        currentPage++;
+        const response = await fetch(`https://api.punkapi.com/v2/beers?page=${currentPage}`)
+        let data = await response.json();
+       
+        data.forEach(e => allData.push(e));
+
+        // we can't get the total no. of pages for the API. Hardcoded to 30.
+        console.log("currenPage=", currentPage)
+        morePagesAvailable = currentPage < 30;
+      }
+
+      this.allBrewDogBeers = allData;
+    },
+
+    addFavourBeer: function(beer) {
+      const index = this.allBrewDogBeers.indexOf(beer);
+      this.allBrewDogBeers[index].isFavourite = true;
+      // trigger an update with new data
+      this.allBrewDogBeers = [...this.allBrewDogBeers];
+    },
+    removeFavourBeer: function(beer) {
+      console.log(beer)
+      const index = this.allBrewDogBeers.indexOf(beer);
+      this.allBrewDogBeers[index].isFavourite = false;
+      // trigger an update with new data
+      this.allBrewDogBeers = [...this.allBrewDogBeers];
+    }
+    },
+  mounted(){ 
+    this.getAllBeers();
+    
+    // fetch("https://api.punkapi.com/v2/beers")
+    // .then(response => this.allBrewDogBeers = response.json())
+    // .then(data => this.allBrewDogBeers = data);
+
+    eventBus.$on('beer-selected', (beer) => {this.selectedBeer = beer});
+    eventBus.$on('beer-favourite-add', beer => this.addFavourBeer(beer));
+    eventBus.$on('beer-favourite-remove', beer => this.removeFavourBeer(beer));
+    }
 };
 </script>
 
